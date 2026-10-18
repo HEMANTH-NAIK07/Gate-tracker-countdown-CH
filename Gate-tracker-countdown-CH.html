@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#0b1411">
+<meta name="description" content="GATE 2027 Chemical Engineering countdown and syllabus tracker">
+<title>GATE 2027 CH: countdown and tracker</title>
+<style>
+:root{--bg:#f2f5f1;--card:#fff;--ink:#14201b;--mute:#5d6b64;--line:#d7dfd9;--acc:#0f6e56;--accbg:#e1f5ee;--track:#dfe6e1;color-scheme:light}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){--bg:#0b1411;--card:#142019;--ink:#e8f0ea;--mute:#9aaaa1;--line:#26352c;--acc:#5dcaa5;--accbg:#0f3a2e;--track:#243229;color-scheme:dark}}
+:root[data-theme="dark"]{--bg:#0b1411;--card:#142019;--ink:#e8f0ea;--mute:#9aaaa1;--line:#26352c;--acc:#5dcaa5;--accbg:#0f3a2e;--track:#243229;color-scheme:dark}
+*,*::before,*::after{box-sizing:border-box}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:system-ui,-apple-system,"Segoe UI",Roboto,sans-serif;line-height:1.5;padding:env(safe-area-inset-top,0px) 0 env(safe-area-inset-bottom,0px)}
+main{max-width:520px;margin:0 auto;padding:20px 16px 32px}
+h1{font-size:22px;font-weight:600;margin:0 0 2px}
+h2{font-size:15px;font-weight:600;margin:0 0 10px}
+.sub{color:var(--mute);font-size:14px;margin:0 0 16px}
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;margin-bottom:14px}
+.big{display:flex;align-items:baseline;gap:10px}
+.big b{font-size:68px;line-height:1;font-weight:600;color:var(--acc);font-variant-numeric:tabular-nums;letter-spacing:-2px}
+.big span{font-size:18px;color:var(--mute)}
+.row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin-top:14px}
+.cell{background:var(--bg);border-radius:10px;padding:8px;text-align:center}
+.cell b{display:block;font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.2}
+.cell i{font-style:normal;font-size:12px;color:var(--mute)}
+.bar{height:9px;background:var(--track);border-radius:5px;overflow:hidden;margin:8px 0 6px}
+.bar div{height:100%;width:0;background:var(--acc);border-radius:5px;transition:width .4s}
+.meta{display:flex;justify-content:space-between;font-size:13px;color:var(--mute)}
+.chips{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:10px}
+button{font:inherit;font-size:14px;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:999px;padding:8px 14px;min-height:40px;cursor:pointer}
+button[aria-pressed="true"]{background:var(--accbg);border-color:var(--acc);color:var(--acc);font-weight:600}
+button:focus-visible,summary:focus-visible,input:focus-visible{outline:2px solid var(--acc);outline-offset:2px}
+.note{font-size:13px;color:var(--mute);margin:4px 0 0}
+details{background:var(--card);border:1px solid var(--line);border-radius:14px;margin-bottom:10px;overflow:hidden}
+summary{list-style:none;cursor:pointer;padding:14px 16px;display:grid;grid-template-columns:1fr auto;gap:2px 10px;align-items:center}
+summary::-webkit-details-marker{display:none}
+summary .nm{font-weight:600;font-size:15px}
+summary .ct{font-size:13px;color:var(--mute);font-variant-numeric:tabular-nums}
+summary .bar{grid-column:1/-1;margin:6px 0 0;height:6px}
+.tl{padding:2px 16px 10px;border-top:1px solid var(--line)}
+label{display:flex;gap:12px;align-items:flex-start;padding:10px 0;font-size:15px;cursor:pointer;border-bottom:1px solid var(--line)}
+label:last-child{border-bottom:0}
+input[type=checkbox]{width:22px;height:22px;margin:1px 0 0;flex:none;accent-color:var(--acc)}
+label.done span{color:var(--mute);text-decoration:line-through}
+.reset{margin-top:6px;border-radius:10px;color:var(--mute)}
+.reset.arm{color:#a32d2d;border-color:#a32d2d}
+</style>
+</head>
+<body>
+<main>
+<h1>GATE 2027 Chemical Engineering</h1>
+<p class="sub" id="target"></p>
+
+<section class="card">
+<div class="big"><b id="d">0</b><span>days to go</span></div>
+<div class="row">
+<div class="cell"><b id="h">0</b><i>hours</i></div>
+<div class="cell"><b id="m">0</b><i>minutes</i></div>
+<div class="cell"><b id="s">0</b><i>seconds</i></div>
+</div>
+<div class="bar" style="margin-top:16px"><div id="tf"></div></div>
+<div class="meta"><span>Time used since 18 Oct 2026</span><span id="tp">0%</span></div>
+</section>
+
+<section class="card">
+<h2>Syllabus covered</h2>
+<div class="bar"><div id="of"></div></div>
+<div class="meta"><span id="oc">0 of 0 topics</span><span id="op">0%</span></div>
+</section>
+
+<section id="subs"></section>
+
+<section class="card">
+<h2>Exam date</h2>
+<div class="chips" id="dates"></div>
+<div class="chips" id="sess"></div>
+<p class="note">IIT Madras has set the exam days. The CH paper date and session aren’t official yet; 13 Feb, afternoon is the expected slot. Pick your confirmed slot when the schedule is out.</p>
+<p class="note" style="margin-top:10px">Suggested order: General aptitude and Engineering mathematics first, then Chemical reaction engineering, Fluid mechanics, and Mass transfer. Then Heat transfer and Process control. Finish with Chemical technology, Thermodynamics, and Plant design.</p>
+<button type="button" class="reset" id="reset">Reset all progress</button>
+</section>
+</main>
+<script>
+var S=[
+["General aptitude",["Verbal: grammar and sentence completion","Verbal: vocabulary, analogies, reading comprehension","Critical reasoning and verbal deduction","Numerical computation, ratios, percentages","Series and data interpretation (graphs, tables)","Quantitative reasoning and analytical puzzles","Spatial aptitude: patterns, folding, mirror images"]],
+["Engineering mathematics",["Linear algebra: matrices and systems of equations","Eigenvalues and eigenvectors","Calculus: limits, continuity, mean value theorems","Definite and improper integrals","Partial derivatives, maxima and minima","Vector calculus: gradient, divergence, curl","Line, surface and volume integrals","Stokes, Gauss and Green’s theorems","First-order ODEs (linear and nonlinear)","Higher-order linear ODEs, Cauchy–Euler equations","Laplace transform","PDEs: separation of variables, boundary value problems","Complex variables: analytic functions, Cauchy’s theorem, series","Probability and statistics: binomial, Poisson, normal","Correlation and regression","Numerical methods: algebraic equations, trapezoidal and Simpson’s rule","Numerical methods: single and multi-step ODE solvers","Finite-difference methods for PDEs (new in 2027)","AI and ML fundamentals (new in 2027)"]],
+["Chemical reaction engineering",["Theories of reaction rates","Kinetics of homogeneous reactions","Interpretation of kinetic data","Single reactions in ideal reactors (batch, CSTR, PFR)","Multiple reactions: yield and selectivity","Residence time distribution and single-parameter models","Non-ideal reactors","Non-isothermal reactors","Heterogeneous catalytic reactions","Diffusion effects in catalysis"]],
+["Fluid mechanics and mechanical operations",["Fluid statics","Newtonian and non-Newtonian fluids","Bernoulli equation and energy balance","Friction factors and pipeline systems","Flow meters, pumps and compressors","Dimensional analysis","Boundary layer theory","Packed and fluidized beds","Size reduction and size separation","Free and hindered settling","Centrifuges, cyclones, thickening, classification","Filtration","Mixing, agitation and solids conveying"]],
+["Mass transfer",["Fick’s laws and molecular diffusion","Mass transfer coefficients","Film, penetration and surface renewal theories","Momentum, heat and mass transfer analogies","Stagewise and continuous contacting, stage efficiency","HTU and NTU concepts","Distillation","Absorption","Leaching and liquid-liquid extraction","Drying","Humidification and dehumidification","Adsorption"]],
+["Heat transfer",["Steady-state conduction","Unsteady-state conduction","Convection and boundary layers","Radiation","Boiling and condensation","Evaporators","Heat exchangers: types and calculations","Double-pipe and shell-and-tube design"]],
+["Instrumentation and process control",["Measurement of process variables, sensors, transducers","Transfer functions and dynamic response","Process reaction curve","Controller modes: P, PI, PID","Control valves","Closed-loop stability","Frequency response","Controller tuning","Cascade and feedforward control","State-space models (new in 2027)"]],
+["Chemical technology",["Sulfuric and phosphoric acid","Chlor-alkali industry","Fertilizers: N, P, K","Pulp and paper","Sugar, oils and fats","Petroleum refining and petrochemicals","Polymers: polyethylene, polypropylene, PVC, polyester"]],
+["Process calculations and thermodynamics",["Mass and energy balances (steady and unsteady)","Recycle, bypass and purge","Multi-reaction and multiphase systems","Combustion calculations","Gas and liquid properties, equations of state","First and second laws","Properties of pure substances and mixtures","Partial molar properties","Fugacity and activity coefficients","Chemical potential and phase equilibria (VLE, LLE)","Chemical reaction equilibrium"]],
+["Plant design and economics",["Process design and sizing of equipment","Heat exchanger and multistage contactor design","Cost indexes and cost estimation","Depreciation","Profitability: payback, NPV, rate of return"]]
+];
+var START=new Date("2026-10-18T00:00:00+05:30");
+var DAYS=[["2027-02-06","Sat 6 Feb"],["2027-02-07","Sun 7 Feb"],["2027-02-13","Sat 13 Feb"],["2027-02-14","Sun 14 Feb"],["2027-02-20","Sat 20 Feb"],["2027-02-21","Sun 21 Feb"]];
+var SESS=[["09:00","Morning 9:00 AM"],["14:30","Afternoon 2:30 PM"]];
+var st={day:"2027-02-13",sess:"14:30",done:{}};
+try{var sv=JSON.parse(localStorage.getItem("gate27ch")||"null");if(sv){st.day=sv.day||st.day;st.sess=sv.sess||st.sess;st.done=sv.done||{}}}catch(e){}
+function $(i){return document.getElementById(i)}
+function save(){try{localStorage.setItem("gate27ch",JSON.stringify(st))}catch(e){}}
+function target(){return new Date(st.day+"T"+st.sess+":00+05:30")}
+function chips(id,list,key){
+var box=$(id);box.innerHTML="";
+list.forEach(function(x){
+var b=document.createElement("button");b.type="button";b.textContent=x[1];
+b.setAttribute("aria-pressed",String(st[key]===x[0]));
+b.onclick=function(){st[key]=x[0];save();chips(id,list,key);label();tick()};
+box.appendChild(b)})}
+function label(){
+var d=DAYS.filter(function(x){return x[0]===st.day})[0][1];
+var s=SESS.filter(function(x){return x[0]===st.sess})[0][1];
+$("target").textContent=d+", "+s+" IST (tentative until the schedule is out)"}
+function tick(){
+var T=target(),now=new Date(),ms=Math.max(0,T-now),s=Math.floor(ms/1000);
+var d=Math.floor(s/86400);s-=d*86400;
+var h=Math.floor(s/3600);s-=h*3600;
+var m=Math.floor(s/60);s-=m*60;
+$("d").textContent=d;$("h").textContent=h;$("m").textContent=m;$("s").textContent=s;
+var p=Math.min(100,Math.max(0,(now-START)/(T-START)*100));
+$("tf").style.width=p+"%";$("tp").textContent=p.toFixed(1)+"%"}
+var subs=[],boxes=[];
+function build(){
+var root=$("subs");
+S.forEach(function(sub,si){
+var det=document.createElement("details");
+var sm=document.createElement("summary");
+sm.innerHTML='<span class="nm"></span><span class="ct"></span><div class="bar"><div></div></div>';
+sm.querySelector(".nm").textContent=sub[0];
+det.appendChild(sm);
+var tl=document.createElement("div");tl.className="tl";
+sub[1].forEach(function(t,ti){
+var id=si+"-"+ti;
+var lb=document.createElement("label");
+var cb=document.createElement("input");cb.type="checkbox";cb.checked=!!st.done[id];
+var sp=document.createElement("span");sp.textContent=t;
+lb.className=cb.checked?"done":"";
+cb.onchange=function(){
+if(cb.checked)st.done[id]=1;else delete st.done[id];
+lb.className=cb.checked?"done":"";save();update()};
+lb.appendChild(cb);lb.appendChild(sp);tl.appendChild(lb);
+boxes.push({id:id,cb:cb,lb:lb,si:si})});
+det.appendChild(tl);root.appendChild(det);
+subs.push({sm:sm,n:sub[1].length})})}
+function update(){
+var tot=0,dn=0;
+subs.forEach(function(x,si){
+var c=0;boxes.forEach(function(b){if(b.si===si&&b.cb.checked)c++});
+x.sm.querySelector(".ct").textContent=c+" / "+x.n;
+x.sm.querySelector(".bar div").style.width=(c/x.n*100)+"%";
+tot+=x.n;dn+=c});
+var p=tot?dn/tot*100:0;
+$("of").style.width=p+"%";$("op").textContent=p.toFixed(0)+"%";
+$("oc").textContent=dn+" of "+tot+" topics"}
+var armed=false,tm;
+$("reset").onclick=function(){
+var b=$("reset");
+if(!armed){armed=true;b.classList.add("arm");b.textContent="Tap again to reset everything";tm=setTimeout(disarm,4000);return}
+clearTimeout(tm);st.done={};save();
+boxes.forEach(function(x){x.cb.checked=false;x.lb.className=""});
+disarm();update()};
+function disarm(){armed=false;var b=$("reset");b.classList.remove("arm");b.textContent="Reset all progress"}
+chips("dates",DAYS,"day");chips("sess",SESS,"sess");label();build();update();tick();
+setInterval(tick,1000);
+</script>
+</body>
+</html>
